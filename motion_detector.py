@@ -2,17 +2,26 @@
 # python pi_surveillance.py --conf conf.json
 
 # import the necessary packages
-from pyimagesearch.tempimage import TempImage
+from motion_detector.temp_image import TempImage
 from picamera.array import PiRGBArray
 from picamera import PiCamera
 import argparse
 import warnings
 import datetime
-# import dropbox
 import imutils
 import json
 import time
 import cv2
+import threading
+
+def upload_frame(frame, conf):
+    now = datetime.datetime.now()
+    t = TempImage("./images", now.strftime("%Y-%m-%d_%H:%M:%S"), conf)
+    cv2.imwrite(t.path, frame)
+    t.create_thumbnail()
+    t.upload()
+    t.upload_thumbnail()
+    t.cleanup()
 
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
@@ -94,7 +103,7 @@ for f in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True
         text = "Occupied"
 
     # draw the text and timestamp on the frame
-    ts = timestamp.strftime("%A %d %B %Y %I:%M:%S%p")
+    ts = timestamp.strftime("%Y-%m-%d_%H:%M:%S")
     cv2.putText(frame, "Room Status: {}".format(text), (10, 20),
                 cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
     cv2.putText(frame, ts, (10, frame.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX,
@@ -110,19 +119,12 @@ for f in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True
             # check to see if the number of frames with consistent motion is
             # high enough
             if motionCounter >= conf["min_motion_frames"]:
-                # check to see if dropbox sohuld be used
-                if conf["use_dropbox"]:
+                # check to see if s3 should be used
+                if conf["use_s3"]:
                     # write the image to temporary file
-                    t = TempImage("./images", ts)
-                    cv2.imwrite(t.path, frame)
-
-                    print("[INFO] Saved image")
-                          # upload the image to Dropbox and cleanup the tempory image
-                    # print("[UPLOAD] {}".format(ts))
-                    # path = "/{base_path}/{timestamp}.jpg".format(
-                    #    base_path=conf["dropbox_base_path"], timestamp=ts)
-                    # client.files_upload(open(t.path, "rb").read(), path)
-                    # t.cleanup()
+                    threading.Thread(target=upload_frame,
+                            args=(frame, conf)
+                    ).start()
 
                 # update the last uploaded timestamp and reset the motion
                 # counter
