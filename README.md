@@ -26,8 +26,8 @@ install_opencv.sh
 	"min_area": 5000,
 	"region_name": "nyc3",
 	"endpoint_url": "https://nyc3.digitaloceanspaces.com",
-	"aws_access_key_id": "627U32YYZKZATVC5KD4I",
-	"aws_secret_access_key": "/j/MKpkNZctsryFwarqML5ZLwzaqmyYeCNfF+SYdn/s",
+	"aws_access_key_id": "<YOUR_ID_HERE>",
+	"aws_secret_access_key": "<YOUR_KEY_HERE>",
 	"bucket": "common-space",
 	"s3_path": "sentinels/aragorn/pictures/",
 	"backlight_timer": 30000
