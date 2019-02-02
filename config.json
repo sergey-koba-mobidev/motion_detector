@@ -1,18 +1,3 @@
-# motion_detector
-RPi motion detection with OpenCV
-Inspired by https://www.pyimagesearch.com/2015/06/01/home-surveillance-and-motion-detection-with-the-raspberry-pi-python-and-opencv/
-
-# Installation
-```bash
-sudo apt install libgirepository1.0-dev
-pip install PyGObject
-pip install boto3
-pip install Pillow
-install_opencv.sh
-```
-
-# Config
-```json
 {
         "show_video": true,
 	"video_resolution": [480, 320],
@@ -32,10 +17,3 @@ install_opencv.sh
 	"s3_path": "sentinels/aragorn/pictures/",
 	"backlight_timer": 30000
 }
-```
-
-# Cron
-```bash
-crontab -e
-* * * * * cd /home/pi/Projects/motion_detector && ./start.sh >> log.txt
-```

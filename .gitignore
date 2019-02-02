@@ -1,2 +1,4 @@
 images/*
 *.swp
+__pycache__
+log.txt

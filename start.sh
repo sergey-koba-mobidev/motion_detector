@@ -10,4 +10,10 @@ workon cv
 # Run the motion detector
 export DISPLAY=:0.0
 mkdir -p images
-python motion_detector.py --conf config.json
+if ! pgrep -f "motion_detector.py" > /dev/null
+then
+	python motion_detector.py --conf config.json
+else
+	echo "[INFO] motion_detector is already running"
+fi
+
