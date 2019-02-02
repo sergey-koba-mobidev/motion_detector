@@ -9,8 +9,8 @@ class DetectorWindow(Gtk.Window):
         Gtk.Window.__init__(self, title="Motion Detector")
         self.image = Gtk.Image()
         self.add(self.image)
-        self.timer = None
-    
+        self.timer = GLib.timeout_add(self.conf["backlight_timer"], self.hide_image, None)
+
     def update_image(self, frame):
         h, w, d = frame.shape
         pixbuf = GdkPixbuf.Pixbuf.new_from_data(frame.tostring(), GdkPixbuf.Colorspace.RGB, False, 8, w, h, w*3, None, None)
