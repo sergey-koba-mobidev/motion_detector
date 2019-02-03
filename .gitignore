@@ -3,3 +3,5 @@ images/*
 __pycache__
 log.txt
 config.json
+*.swo
+__pychache__/*

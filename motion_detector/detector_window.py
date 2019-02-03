@@ -10,11 +10,11 @@ class DetectorWindow(Gtk.Window):
         self.image = Gtk.Image()
         self.add(self.image)
         self.timer = GLib.timeout_add(self.conf["backlight_timer"], self.hide_image, None)
-
+    
     def update_image(self, frame):
         h, w, d = frame.shape
         pixbuf = GdkPixbuf.Pixbuf.new_from_data(frame.tostring(), GdkPixbuf.Colorspace.RGB, False, 8, w, h, w*3, None, None)
-        self.image.set_from_pixbuf(pixbuf)
+        self.image.set_from_pixbuf(pixbuf.copy())
 
     def set_backlight_timer(self):
         self.image.show()

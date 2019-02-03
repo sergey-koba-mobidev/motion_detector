@@ -115,8 +115,7 @@ def detect(conf, update_image, set_backlight_timer):
         if conf["show_video"]:
             # display the security feed
             display_frame = cv2.resize(frame, tuple(conf["video_resolution"]))
-            # cv2.imshow("Security Feed", display_frame)
-            GLib.idle_add(update_image, display_frame)
+            GLib.idle_add(update_image, cv2.flip(display_frame, 1))
 
         # clear the stream in preparation for the next frame
         rawCapture.truncate(0)
