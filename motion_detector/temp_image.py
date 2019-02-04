@@ -1,9 +1,9 @@
 # import the necessary packages
 import uuid
 import os
-import boto3
 import datetime
 from PIL import Image
+from motion_detector.s3_client import s3_client
 
 class TempImage:
 
@@ -17,12 +17,7 @@ class TempImage:
                                                      name=name, ext=ext)
         self.th_path = "{base_path}/th_{name}{ext}".format(base_path=basePath,
                                                      name=name, ext=ext)
-        session = boto3.session.Session()
-        self.client = session.client('s3',
-                                region_name=conf['region_name'],
-                                endpoint_url=conf['endpoint_url'],
-                                aws_access_key_id=conf['aws_access_key_id'],
-                                aws_secret_access_key=conf['aws_secret_access_key'])
+        self.client = s3_client(conf)
 
     def cleanup(self):
         # remove the file
