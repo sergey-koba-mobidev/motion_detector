@@ -81,6 +81,7 @@ def detect(conf, update_image, set_backlight_timer):
 
         # draw the text and timestamp on the frame
         ts = timestamp.strftime("%Y-%m-%d_%H:%M:%S")
+        frame = cv2.flip(frame, 1)
         cv2.putText(frame, "Room Status: {}".format(text), (10, 20),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
         cv2.putText(frame, ts, (10, frame.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX,
@@ -115,7 +116,7 @@ def detect(conf, update_image, set_backlight_timer):
         if conf["show_video"]:
             # display the security feed
             display_frame = cv2.resize(frame, tuple(conf["video_resolution"]))
-            GLib.idle_add(update_image, cv2.flip(display_frame, 1))
+            GLib.idle_add(update_image, display_frame)
 
         # clear the stream in preparation for the next frame
         rawCapture.truncate(0)
